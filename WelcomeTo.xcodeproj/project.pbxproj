@@ -6,13 +6,38 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		034480302E421AAD00438FC6 /* README_fr.md in Resources */ = {isa = PBXBuildFile; fileRef = 0344802F2E421AAD00438FC6 /* README_fr.md */; };
+		034480312E421AAD00438FC6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0344802E2E421AAD00438FC6 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		0344802E2E421AAD00438FC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0344802F2E421AAD00438FC6 /* README_fr.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_fr.md; sourceTree = "<group>"; };
 		03C2B58C2E410D0800FC567D /* WelcomeTo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WelcomeTo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		03C82DE42E41EB70000F1AAD /* Exceptions for "WelcomeTo" folder in "WelcomeTo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 03C2B58B2E410D0800FC567D /* WelcomeTo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		034480362E425A8E00438FC6 /* Doc */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Doc;
+			sourceTree = "<group>";
+		};
 		03C2B58E2E410D0800FC567D /* WelcomeTo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				03C82DE42E41EB70000F1AAD /* Exceptions for "WelcomeTo" folder in "WelcomeTo" target */,
+			);
 			path = WelcomeTo;
 			sourceTree = "<group>";
 		};
@@ -32,6 +57,9 @@
 		03C2B5832E410D0800FC567D = {
 			isa = PBXGroup;
 			children = (
+				034480362E425A8E00438FC6 /* Doc */,
+				0344802E2E421AAD00438FC6 /* README.md */,
+				0344802F2E421AAD00438FC6 /* README_fr.md */,
 				03C2B58E2E410D0800FC567D /* WelcomeTo */,
 				03C2B58D2E410D0800FC567D /* Products */,
 			);
@@ -61,6 +89,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				034480362E425A8E00438FC6 /* Doc */,
 				03C2B58E2E410D0800FC567D /* WelcomeTo */,
 			);
 			name = WelcomeTo;
@@ -91,6 +120,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = 03C2B5832E410D0800FC567D;
 			minimizedProjectReferenceProxies = 1;
@@ -109,6 +139,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				034480302E421AAD00438FC6 /* README_fr.md in Resources */,
+				034480312E421AAD00438FC6 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +217,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -242,6 +275,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -259,6 +293,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WelcomeTo/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -291,6 +326,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WelcomeTo/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
