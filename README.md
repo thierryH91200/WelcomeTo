@@ -2,14 +2,14 @@
 The macOS application “WelcomeTo” offers a modern interface for project/document management, with data persistence thanks to SwiftData. It is structured around two main windows:
 
 <p align="center">
-<img src="Doc/Capture2.png" alt="Transactions">
+<img src="Doc/Capture1.png" alt="Transactions">
 <p align="center">
 <em>Doc1</em>
 </p>
 </p>
 
 <p align="center">
-<img src="Doc/Capture1.png" alt="Transactions">
+<img src="Doc/Capture2.png" alt="Transactions">
 <p align="center">
 <em>Doc2</em>
 </p>

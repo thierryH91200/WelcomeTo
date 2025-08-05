@@ -28,31 +28,3 @@ final class SplashManager: ObservableObject {
         }
     }
 }
-
-//class SplashWindowController {
-//    private var window: NSWindow?
-//
-//    func show() {
-//        let hostingView = NSHostingView(rootView: SplashScreenView())
-//
-//        window = NSWindow(
-//            contentRect: NSRect(x: 0, y: 0, width: 300, height: 300),
-//            styleMask: [.titled, .closable],
-//            backing: .buffered,
-//            defer: false
-//        )
-//        window?.center()
-//        window?.title = ""
-//        window?.isOpaque = false
-//        window?.backgroundColor = NSColor.white
-//        window?.contentView = hostingView
-//        window?.isReleasedWhenClosed = false
-//        window?.makeKeyAndOrderFront(nil)
-//        NSApp.activate(ignoringOtherApps: true)
-//    }
-//
-//    func close() {
-//        window?.close()
-//        window = nil
-//    }
-//}
