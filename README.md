@@ -52,3 +52,7 @@ The macOS application “WelcomeTo” offers a modern interface for project/docu
 
 In summary:
 This is a macOS “project/document manager” application with a welcome screen, simple navigation, local data persistence, and a user experience tailored to the Apple ecosystem.
+
+
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/thierryH91200/WelcomeTo.svg?variant=adaptive)](https://starchart.cc/thierryH91200/WelcomeTo)

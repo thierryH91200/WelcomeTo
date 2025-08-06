@@ -22,12 +22,10 @@ struct WelcomeToApp: App {
     
     var container: ModelContainer
 
-    
     let schema = Schema([
         Item.self
     ])
 
-    
     init() {
         
         do {
