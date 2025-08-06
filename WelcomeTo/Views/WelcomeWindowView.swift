@@ -62,6 +62,8 @@ struct WelcomeWindowView: View {
                             for item in items {
                                 modelContext.delete(item)
                             }
+                            UserDefaults.standard.set(0, forKey: "ItemLastNumber")
+
                             try? modelContext.save()
                         }
                         appState.isProjectOpen = true

@@ -20,7 +20,7 @@ struct WelcomeToApp: App {
     @StateObject private var appState = AppState()
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    var container: ModelContainer
+    var modelContainer: ModelContainer
 
     let schema = Schema([
         Item.self
@@ -41,28 +41,27 @@ struct WelcomeToApp: App {
             let storeURL = pegaseDirectory.appendingPathComponent("WelcomeTo.store")
 
             let config = ModelConfiguration(url: storeURL)
-            print("Store URL:", config.url)
+            print("💾 SwiftData store location: \(storeURL.path)")
 
-            container = try ModelContainer(for: schema, configurations: config)
-            container.mainContext.undoManager = UndoManager()
+            modelContainer = try ModelContainer(for: schema, configurations: config)
+            modelContainer.mainContext.undoManager = UndoManager()
 
         } catch {
             fatalError("Failed to configure SwiftData container.")
         }
     }
 
-    
     var body: some Scene {
         WindowGroup {
             if appState.isProjectOpen {
                 ContentView()
+                    .environment(\.modelContext, modelContainer.mainContext)
             } else {
                 WelcomeWindowView()
                     .environmentObject(appState)
-//                    .environment(\.modelContext, modelContainer.mainContext)
+                    .environment(\.modelContext, modelContainer.mainContext)
             }
         }
-        .modelContainer(for: Item.self)
         .commands {
             CommandGroup(replacing: .newItem) { }
         }

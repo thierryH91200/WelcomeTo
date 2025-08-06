@@ -10,8 +10,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-    
+    @Query(sort: [SortDescriptor(\Item.number, order: .forward)]) private var items: [Item]
+
     var body: some View {
         VStack {
             Text("Main window is open ✅")
@@ -19,6 +19,7 @@ struct ContentView: View {
             List {
                 ForEach(items) { item in
                     HStack {
+                        Text(item.number.map { "N°\($0)" } ?? "—")
                         Text(item.timestamp.formatted(date: .numeric, time: .shortened))
                         Spacer()
                     }
@@ -49,8 +50,15 @@ struct ContentView: View {
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
+            do {
+                try modelContext.save()
+                print("✅ Item ajouté et sauvegardé")
+            } catch {
+                print("❌ Erreur lors du save :", error)
+            }
         }
     }
+    
     func printHello() {
         print("ContentView chargé")
         
