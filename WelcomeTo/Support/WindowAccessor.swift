@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
-
 
 struct WindowAccessor: NSViewRepresentable {
     let callback: (NSWindow?) -> Void

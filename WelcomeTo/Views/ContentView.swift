@@ -1,9 +1,12 @@
+
 //
 //  ContentView.swift
 //  Welcome
 //
-//  Created by thierryH24 on 03/08/2025.
+//  Created by thierryH24 on 04/08/2025.
 //
+
+
 
 import SwiftUI
 import SwiftData
@@ -28,23 +31,15 @@ struct ContentView: View {
             Button("Add Item") {
                 addItem()
             }
-
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.green)
         .onAppear {
-            printHello()
-
-            if let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "Main Project Window" }) {
-                window.makeKeyAndOrderFront(nil)
-                window.makeMain()
-                NSApp.activate(ignoringOtherApps: true)
-            } else {
-                NSApp.activate(ignoringOtherApps: true)
-                NSApp.mainWindow?.makeKeyAndOrderFront(nil)
-            }
+            activateMainWindow()
         }
     }
+
+    // MARK: - Private Methods
 
     private func addItem() {
         withAnimation {
@@ -52,24 +47,29 @@ struct ContentView: View {
             modelContext.insert(newItem)
             do {
                 try modelContext.save()
-                print("✅ Item ajouté et sauvegardé")
+                print("✅ Item added and saved")
             } catch {
-                print("❌ Erreur lors du save :", error)
+                print("❌ Error during save:", error)
             }
         }
     }
     
-    func printHello() {
-        print("ContentView chargé")
-        
+    private func activateMainWindow() {
+        if let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "Main Project Window" }) {
+            window.makeKeyAndOrderFront(nil)
+            window.makeMain()
+            NSApp.activate(ignoringOtherApps: true)
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+            NSApp.mainWindow?.makeKeyAndOrderFront(nil)
+        }
     }
 }
+
+// MARK: - View Extension
 
 extension View {
     func getHostingWindow(completion: @escaping (NSWindow?) -> Void) -> some View {
         background(WindowAccessor(callback: completion))
     }
 }
-
-
-

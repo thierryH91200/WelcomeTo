@@ -1,4 +1,10 @@
 
+
+
+![Swift](https://img.shields.io/badge/Swift-5.7-orange) ![macOS](https://img.shields.io/badge/macOS-14-blue) ![License](https://img.shields.io/badge/License-MIT-green)
+    <a href="https://github.com/thierryH91200/WelcomeTo/releases/latest" alt="Downloads">
+          <img src="https://img.shields.io/github/downloads/thierryH91200/WelcomeTo/total.svg" /></a>
+
 L'application macOS « WelcomeTo » propose une interface moderne pour la gestion de projets/documents, avec persistance des données grâce à SwiftData. Elle est structurée autour de deux principales fenêtres :
 
 1. Écran d’accueil (WelcomeWindowView)
