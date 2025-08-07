@@ -143,13 +143,13 @@ private struct RecentProjectRowView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "doc.text.fill")
-            VStack(alignment: .leading) {
-                Text(project.name)
-                Text(project.url.path)
-                    .foregroundColor(.gray)
-                    .font(.caption)
-            }
+            Image(systemName: "cylinder.split.1x2.fill")
+                .foregroundColor(.accentColor)
+            Text(project.name)
+            Text(project.url.path)
+                .foregroundColor(.gray)
+                .font(.caption)
+
             Spacer()
             Button(role: .destructive) {
                 onDelete()
