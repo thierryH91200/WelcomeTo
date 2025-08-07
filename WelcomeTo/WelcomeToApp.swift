@@ -59,6 +59,7 @@ struct WelcomeToApp: App {
                         print("Project ouvert : \(url)")
                         let project = RecentProject(name: url.lastPathComponent, url: url)
                         recentManager.addProject(project)
+                        dataController = DataController(url: url)
                     },
                     onCreateProject: {
                         appState.isProjectOpen = true
