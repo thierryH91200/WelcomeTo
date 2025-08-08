@@ -58,11 +58,10 @@ class RecentProjectsManager: ObservableObject,  Identifiable {
         // Ajoute le projet en haut de la liste
         projects.insert(project, at: 0)
         
-        // Limite à 20 éléments
+        // Limite à maxRecentProjects éléments
         if projects.count > maxRecentProjects {
             projects = Array(projects.prefix(20))
         }
-
         save()
     }
     
@@ -70,5 +69,18 @@ class RecentProjectsManager: ObservableObject,  Identifiable {
         let project = RecentProject(name: url.lastPathComponent, url: url)
         addProject(project)
     }
-
+    
+    // Suppression d’un projet
+   func removeProject(_ project: RecentProject) {
+        projects.removeAll { $0.id == project.id }
+        save()
+    }
+    
+    // Suppression par index (optionnel)
+    func removeProject(at offsets: IndexSet) {
+        for index in offsets.sorted(by: >) { // Supprimer dans l'ordre inverse pour éviter les erreurs d'index
+            projects.remove(at: index)
+        }
+        save()
+    }
 }

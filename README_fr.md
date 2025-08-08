@@ -5,38 +5,43 @@
     <a href="https://github.com/thierryH91200/WelcomeTo/releases/latest" alt="Downloads">
           <img src="https://img.shields.io/github/downloads/thierryH91200/WelcomeTo/total.svg" /></a>
 
-L'application macOS « WelcomeTo » propose une interface moderne pour la gestion de projets/documents, avec persistance des données grâce à SwiftData. Elle est structurée autour de deux principales fenêtres :
+L'application SwiftUI s’appuie sur SwiftData pour la gestion des données et suit une structure moderne :
 
-1. Écran d’accueil (WelcomeWindowView)
-• Présente un écran d’accueil à l’utilisateur avec :
-   • Le nom et la version de l’application.
-   • Une liste de projets récents (affichés à droite).
-   • Trois actions principales :
-      • Créer un nouveau document (réinitialise la base de données).
-      • Ouvrir un document existant (via une boîte de dialogue macOS).
-      • Ouvrir un projet exemple.
-• Utilise un design en HStack avec séparation visuelle.
+1. Gestion de l’état global
+• La classe AppState (ObservableObject) gère l’état global de l’app :
+   • databaseURL : l’URL de la base de données en cours
+   • isProjectOpen : indique si un projet est ouvert
 
-2. Écran principal du projet (ContentView)
-• Affiche la liste des éléments (items) stockés en base de données.
-• Indique le nombre total d’items.
-• Permet d’ajouter rapidement un nouvel item (avec la date/heure).
-• Met l’accent sur la fenêtre principale lors de l’affichage.
+2. Cycle de vie de l’application
+• WelcomeToApp est le point d’entrée principal (@main).
+• Elle crée et conserve :
+   • Un AppState partagé (pour l’état)
+   • Un gestionnaire de projets récents (RecentProjectsManager)
+   • Un contrôleur de données (DataController), qui encapsule le conteneur SwiftData
 
-3. Gestion de la donnée
-• Utilisation de SwiftData pour la persistance des items dans un dossier dédié du répertoire Documents (WelcomeBDD/WelcomeTo.store).
-• Les opérations CRUD sont réalisées via modelContext.
+3. Initialisation et gestion de la base de données
+• Au démarrage, un dossier spécifique (“WelcomeBDD”) est créé dans le dossier Documents de l’utilisateur pour stocker la base.
+• Le conteneur de modèles SwiftData (ModelContainer) est initialisé avec ce chemin.
+• L’application gère les undo via un UndoManager.
 
-4. Structure de l’application
-• Le point d’entrée principal est WelcomeToApp.
-• Utilisation d’un objet d’état AppState (ObservableObject) pour piloter la navigation (écran d’accueil ou principal), et stocker l’URL de la base de données active.
+4. Navigation et affichage
+• Si un projet est ouvert (isProjectOpen), l’app affiche ContentView avec le contexte de données.
+• Sinon, elle présente une vue de bienvenue (WelcomeWindowView) pour ouvrir ou créer un projet, affichant aussi les projets récents.
 
-5. Expérience utilisateur
-• Une gestion de l’accueil avec animation de splash (SplashManager).
-• Activation explicite de la fenêtre principale pour améliorer l’expérience utilisateur macOS.
-• Prise en charge de l’annulation (UndoManager).
+5. Ouverture de projet
+• La fonction openDocument(at:) permet d’ouvrir un projet : elle réinitialise le contrôleur de données et met à jour l’état global.
+
+6. Architecture
+• Utilisation de l’environnement SwiftUI pour partager le contexte de données (.environment(\.modelContext, …)) et l’état global (.environmentObject(appState)).
+• Il existe une classe dédiée DataController pour encapsuler la configuration du modèle SwiftData.
 
 ⸻
 
-En résumé :
-Il s’agit d’une application macOS de type « gestionnaire de projets/documents » avec écran d’accueil, navigation simple, persistance des données locale, et une expérience utilisateur adaptée à l’écosystème Apple.
+En résumé
+
+Ton application permet :
+• De gérer des projets stockés localement (avec SwiftData)
+• D’ouvrir/créer des projets, de lister les projets récents
+• De passer d’un écran d’accueil à un écran principal selon l’état d’ouverture d’un projet
+
+L’architecture suit les bonnes pratiques SwiftUI avec une séparation claire entre l’état, la gestion des données et l’interface utilisateur.

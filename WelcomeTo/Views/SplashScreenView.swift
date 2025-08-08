@@ -19,10 +19,10 @@ struct SplashScreenView: View {
                 .foregroundColor(.accentColor)
 
             Text("WelcomeTo")
-                .font(.system(size: 28, weight: .semibold))
+                .font(.system(size: 56, weight: .semibold))
 
             Text("Loading...")
-                .foregroundColor(.gray)
+                .foregroundColor(.red)
         }
         .frame(width: 300, height: 300)
         .background(Color.white)

@@ -36,7 +36,7 @@ struct WelcomeWindowView: View {
             )
             .environmentObject(appState)
         }
-        .frame(width: 800, height: 500)
+        .frame(width: 700, height: 400)
         .getHostingWindow { self.window = $0 }
     }
 }
@@ -91,10 +91,14 @@ private struct LeftPanelView: View {
                         appState.isProjectOpen = true
                     }
                 }
+//                .buttonStyle(.borderedProminent)
+
 
                 Button("Open sample document Project...") {
                     onCreateProject()
                 }
+//                .buttonStyle(.borderedProminent)
+
             }
 
             Spacer()
@@ -121,7 +125,7 @@ private struct RecentProjectsListView: View {
                         project: project,
                         onOpen: openHandler,
                         onDelete: {
-//                            recentManager.removeProject(project)
+                            recentManager.removeProject(project)
                         }
                     )
                 }
@@ -160,7 +164,6 @@ private struct RecentProjectRowView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            print(project.url)
             onOpen(project.url)
             appState.isProjectOpen = true
         }

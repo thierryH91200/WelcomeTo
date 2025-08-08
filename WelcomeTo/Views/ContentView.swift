@@ -13,6 +13,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject var appState: AppState
+
     @Query(sort: [SortDescriptor(\Item.number, order: .forward)]) private var items: [Item]
 
     var body: some View {
@@ -37,6 +39,16 @@ struct ContentView: View {
         .onAppear {
             activateMainWindow()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    appState.isProjectOpen = false // Revenir à WelcomeWindowView
+                } label: {
+                    Label("Home", systemImage: "house")
+                }
+            }
+        }
+
     }
 
     // MARK: - Private Methods
