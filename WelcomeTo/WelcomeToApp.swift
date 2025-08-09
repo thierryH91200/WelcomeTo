@@ -76,11 +76,11 @@ struct WelcomeToApp: App {
     func createProject() {
         // 1. Demander un nom à l’utilisateur
         let alert = NSAlert()
-        alert.messageText = "Nom du projet"
-        alert.informativeText = "Entrez le nom de votre nouvelle base de données :"
+        alert.messageText = String(localized:"Nom du projet")
+        alert.informativeText = String(localized:"Entrez le nom de votre nouvelle base de données :")
         alert.alertStyle = .informational
-        alert.addButton(withTitle: "Annuler")
-        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: String(localized:"Cancel"))
+        alert.addButton(withTitle: String(localized:"OK"))
 
         let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
         textField.placeholderString = "MonProjet"

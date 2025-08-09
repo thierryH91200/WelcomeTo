@@ -107,7 +107,7 @@ private struct LeftPanelView: View {
         .frame(maxWidth: .infinity)
         .padding()
     }
-    private func createDatabase(named projectName: String) {
+    private func createDatabase(named projectName: String) -> URL? {
         let documentsURL = URL.documentsDirectory
         let newDirectory = documentsURL.appendingPathComponent(projectName)
         
@@ -124,9 +124,11 @@ private struct LeftPanelView: View {
             try container.mainContext.save()
             
             print("✅ Base créée : \(storeURL.path)")
+            return storeURL
             
         } catch {
             print("❌ Erreur création base : \(error)")
+            return nil
         }
     }
 }
@@ -206,10 +208,11 @@ private struct RecentProjectRowView: View {
 struct CreateProjectView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var appState: AppState
-//    @ObservedObject var recentManager: RecentProjectsManager
+    @EnvironmentObject var recentManager: RecentProjectsManager
 
     @State private var projectName: String = "Project without a Name"
-    var onCreate: (String) -> Void
+    static let numberKey = "ItemLastNumber"
+    var onCreate: (String) -> URL?
     
     var body: some View {
         VStack(spacing: 20) {
@@ -227,11 +230,13 @@ struct CreateProjectView: View {
                 }
                 Button("Create") {
                     let name = projectName.isEmpty ? "Project Without a Name" : projectName
-                    onCreate(name)
-//                    recentManager.addProject(with: url)
+                    if let url = onCreate(name) {
+                        recentManager.addProject(with: url)
+                        UserDefaults.standard.set(0, forKey: Self.numberKey)
 
-                    appState.isProjectOpen = true
-                    dismiss()
+                        appState.isProjectOpen = true
+                        dismiss()
+                    }
                 }
                 .keyboardShortcut(.defaultAction)
             }
