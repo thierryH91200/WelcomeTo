@@ -6,8 +6,6 @@
 //  Created by thierryH24 on 04/08/2025.
 //
 
-
-
 import SwiftUI
 import SwiftData
 

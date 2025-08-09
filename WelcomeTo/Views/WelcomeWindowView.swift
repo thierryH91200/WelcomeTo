@@ -172,15 +172,18 @@ private struct RecentProjectRowView: View {
         HStack(spacing: 12) {
             Image(systemName: "cylinder.split.1x2.fill")
                 .foregroundColor(.accentColor)
+                .imageScale(.large)
             
             VStack(alignment: .leading, spacing: 2) {
+                // Nom du projet
                 Text(project.name)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.primary)
                 
-                Text(project.url.path)
-                    .foregroundColor(.gray)
-                    .font(.caption)
+                // Chemin avec tilde
+                Text((project.url.path as NSString).abbreviatingWithTildeInPath)
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
             }
             
             Spacer()
