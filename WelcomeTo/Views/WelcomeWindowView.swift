@@ -13,23 +13,25 @@ struct WelcomeWindowView: View {
     @ObservedObject var recentManager: RecentProjectsManager
     @EnvironmentObject var appState: AppState
     @Environment(\.modelContext) private var modelContext
-
+    
     var openHandler: (URL) -> Void
     var onCreateProject: () -> Void
-
+    
     @State private var window: NSWindow?
-
+    @State private var showCreateSheet = false
+    
+    
     var body: some View {
         HStack(spacing: 0) {
             LeftPanelView(
                 onCreateProject: onCreateProject,
                 openHandler: openHandler,
-                recentManager: recentManager
             )
             .environmentObject(appState)
+            .environmentObject(recentManager)
 
             Divider()
-
+            
             RecentProjectsListView(
                 recentManager: recentManager,
                 openHandler: openHandler
@@ -45,40 +47,35 @@ private struct LeftPanelView: View {
     @Environment(\.modelContext) private var modelContext
     var onCreateProject: () -> Void
     var openHandler: (URL) -> Void
-    var recentManager: RecentProjectsManager
     @EnvironmentObject var appState: AppState
-
+    @EnvironmentObject var recentManager: RecentProjectsManager
+    
+    @State private var showCreateSheet = false
+    
+    
     var body: some View {
         VStack(spacing: 20) {
             Spacer()
-
+            
             Image(systemName: "hammer.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 100, height: 100)
                 .foregroundColor(.accentColor)
-
+            
             Text("WelcomeTo")
                 .font(.largeTitle)
                 .bold()
-
-            Text("Version 1.0")
+            
+            Text("Version 1.1")
                 .foregroundColor(.secondary)
-
+            
             VStack(spacing: 10) {
                 Button("Create New Document...") {
-                    let fetchDescriptor = FetchDescriptor<Item>()
-                    if let items = try? modelContext.fetch(fetchDescriptor) {
-                        for item in items {
-                            modelContext.delete(item)
-                        }
-                        UserDefaults.standard.set(0, forKey: "ItemLastNumber")
-                        try? modelContext.save()
-                    }
-                    onCreateProject()
+                    showCreateSheet = true
                 }
-                .buttonStyle(.borderedProminent)
-
+                
+                                
                 Button("Open existing document...") {
                     let panel = NSOpenPanel()
                     panel.canChooseFiles = true
@@ -91,34 +88,60 @@ private struct LeftPanelView: View {
                         appState.isProjectOpen = true
                     }
                 }
-//                .buttonStyle(.borderedProminent)
-
-
+                //                .buttonStyle(.borderedProminent)
+                
                 Button("Open sample document Project...") {
                     onCreateProject()
                 }
-//                .buttonStyle(.borderedProminent)
-
+                //                .buttonStyle(.borderedProminent)
             }
-
+            
             Spacer()
         }
+        .sheet(isPresented: $showCreateSheet) {
+            CreateProjectView { projectName in
+                createDatabase(named: projectName)
+            }
+        }
+        
         .frame(maxWidth: .infinity)
         .padding()
+    }
+    private func createDatabase(named projectName: String) {
+        let documentsURL = URL.documentsDirectory
+        let newDirectory = documentsURL.appendingPathComponent(projectName)
+        
+        do {
+            try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
+            let storeURL = newDirectory.appendingPathComponent("\(projectName).sqlite")
+            
+            let configuration = ModelConfiguration(url: storeURL)
+            let container = try ModelContainer(for: Item.self, configurations: configuration)
+            
+            // Exemple d’insertion
+            let newItem = Item(timestamp: .now)
+            container.mainContext.insert(newItem)
+            try container.mainContext.save()
+            
+            print("✅ Base créée : \(storeURL.path)")
+            
+        } catch {
+            print("❌ Erreur création base : \(error)")
+        }
     }
 }
 
 private struct RecentProjectsListView: View {
     @ObservedObject var recentManager: RecentProjectsManager
     var openHandler: (URL) -> Void
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Recent Projects")
                 .font(.headline)
                 .padding(.horizontal)
                 .padding(.top)
-
+            
             List {
                 ForEach(recentManager.projects, id: \.id) { project in
                     RecentProjectRowView(
@@ -142,24 +165,31 @@ private struct RecentProjectRowView: View {
     let project: RecentProject
     let onOpen: (URL) -> Void
     let onDelete: () -> Void
-
+    
     @EnvironmentObject var appState: AppState
-
+    
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             Image(systemName: "cylinder.split.1x2.fill")
                 .foregroundColor(.accentColor)
-            Text(project.name)
-            Text(project.url.path)
-                .foregroundColor(.gray)
-                .font(.caption)
-
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(project.name)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.primary)
+                
+                Text(project.url.path)
+                    .foregroundColor(.gray)
+                    .font(.caption)
+            }
+            
             Spacer()
             Button(role: .destructive) {
                 onDelete()
             } label: {
                 Image(systemName: "trash")
             }
+            
             .buttonStyle(BorderlessButtonStyle())
         }
         .contentShape(Rectangle())
@@ -167,5 +197,42 @@ private struct RecentProjectRowView: View {
             onOpen(project.url)
             appState.isProjectOpen = true
         }
+    }
+}
+
+struct CreateProjectView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var appState: AppState
+//    @ObservedObject var recentManager: RecentProjectsManager
+
+    @State private var projectName: String = "Project without a Name"
+    var onCreate: (String) -> Void
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("New project")
+                .font(.headline)
+            
+            TextField("Project Name", text: $projectName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(width: 250)
+            
+            HStack {
+                Button("Cancel") {
+                    appState.isProjectOpen = false
+                    dismiss()
+                }
+                Button("Create") {
+                    let name = projectName.isEmpty ? "Project Without a Name" : projectName
+                    onCreate(name)
+//                    recentManager.addProject(with: url)
+
+                    appState.isProjectOpen = true
+                    dismiss()
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding()
     }
 }
