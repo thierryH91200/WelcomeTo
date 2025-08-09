@@ -5,6 +5,25 @@
     <a href="https://github.com/thierryH91200/WelcomeTo/releases/latest" alt="Downloads">
           <img src="https://img.shields.io/github/downloads/thierryH91200/WelcomeTo/total.svg" /></a>
 
+
+<a href="README.md">English</a> | <a href="README_fr.md">Français</a>
+
+
+<p align="center">
+<img src="Doc/Capture1.png" alt="Transactions">
+<p align="center">
+<em>Doc1</em>
+</p>
+</p>
+
+<p align="center">
+<img src="Doc/Capture2.png" alt="Transactions">
+<p align="center">
+<em>Doc2</em>
+</p>
+</p>
+
+
 L'application SwiftUI s’appuie sur SwiftData pour la gestion des données et suit une structure moderne :
 
 1. Gestion de l’état global
