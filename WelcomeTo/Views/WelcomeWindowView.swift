@@ -49,6 +49,7 @@ private struct LeftPanelView: View {
     var openHandler: (URL) -> Void
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var recentManager: RecentProjectsManager
+    @EnvironmentObject var projectCreationManager: ProjectCreationManager
     
     @State private var showCreateSheet = false
     
@@ -100,7 +101,7 @@ private struct LeftPanelView: View {
         }
         .sheet(isPresented: $showCreateSheet) {
             CreateProjectView { projectName in
-                createDatabase(named: projectName)
+                projectCreationManager.createDatabase(named: projectName)
             }
         }
         
@@ -108,28 +109,7 @@ private struct LeftPanelView: View {
         .padding()
     }
     private func createDatabase(named projectName: String) -> URL? {
-        let documentsURL = URL.documentsDirectory
-        let newDirectory = documentsURL.appendingPathComponent(projectName)
-        
-        do {
-            try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
-            let storeURL = newDirectory.appendingPathComponent("\(projectName).sqlite")
-            
-            let configuration = ModelConfiguration(url: storeURL)
-            let container = try ModelContainer(for: Item.self, configurations: configuration)
-            
-            // Exemple d’insertion
-            let newItem = Item(timestamp: .now)
-            container.mainContext.insert(newItem)
-            try container.mainContext.save()
-            
-            print("✅ Base créée : \(storeURL.path)")
-            return storeURL
-            
-        } catch {
-            print("❌ Erreur création base : \(error)")
-            return nil
-        }
+        projectCreationManager.createDatabase(named: projectName)
     }
 }
 

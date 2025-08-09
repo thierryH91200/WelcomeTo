@@ -15,7 +15,7 @@ final class Item {
     var timestamp: Date
     var number: Int?
 
-    init(timestamp: Date) {
+    init(timestamp: Date = .now) {
         // Lire la dernière valeur depuis UserDefaults
         let lastNumber = UserDefaults.standard.integer(forKey: Self.numberKey)
         

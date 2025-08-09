@@ -6,6 +6,9 @@
 
 The macOS application “WelcomeTo” offers a modern interface for project/document management, with data persistence thanks to SwiftData. It is structured around two main windows:
 
+<a href="README.md">English</a> | <a href="README_fr.md">Français</a>
+
+
 <p align="center">
 <img src="Doc/Capture1.png" alt="Transactions">
 <p align="center">

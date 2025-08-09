@@ -22,6 +22,7 @@ struct WelcomeToApp: App {
 
     @StateObject private var appState = AppState()
     @StateObject private var recentManager = RecentProjectsManager() // ← ici
+    @StateObject private var projectCreationManager = ProjectCreationManager()
 
     @State private var dataController: DataController
     var modelContainer: ModelContainer
@@ -69,6 +70,9 @@ struct WelcomeToApp: App {
                 )
                 .environment(\.modelContext, modelContainer.mainContext)
                 .environmentObject(appState)
+                .environmentObject(recentManager)
+                // Injection of projectCreationManager environment object
+                .environmentObject(projectCreationManager)
             }
         }
     }
