@@ -1,10 +1,10 @@
 
 
-
 ![Swift](https://img.shields.io/badge/Swift-5.7-orange) ![macOS](https://img.shields.io/badge/macOS-14-blue) ![License](https://img.shields.io/badge/License-MIT-green)
     <a href="https://github.com/thierryH91200/WelcomeTo/releases/latest" alt="Downloads">
           <img src="https://img.shields.io/github/downloads/thierryH91200/WelcomeTo/total.svg" /></a>
 
+L'application macOS « WelcomeTo » offre une interface moderne pour la gestion de projets et de documents, avec la persistance des données grâce à SwiftData. Elle s'articule autour de deux fenêtres principales :
 
 <a href="README.md">English</a> | <a href="README_fr.md">Français</a>
 
@@ -22,9 +22,6 @@
 <em>Doc2</em>
 </p>
 </p>
-
-
-L'application SwiftUI s’appuie sur SwiftData pour la gestion des données et suit une structure moderne :
 
 1. Gestion de l’état global
 • La classe AppState (ObservableObject) gère l’état global de l’app :
@@ -58,7 +55,7 @@ L'application SwiftUI s’appuie sur SwiftData pour la gestion des données et s
 
 En résumé
 
-Ton application permet :
+L'application permet :
 • De gérer des projets stockés localement (avec SwiftData)
 • D’ouvrir/créer des projets, de lister les projets récents
 • De passer d’un écran d’accueil à un écran principal selon l’état d’ouverture d’un projet

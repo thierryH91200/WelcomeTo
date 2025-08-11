@@ -13,7 +13,7 @@ struct RecentProject: Identifiable, Hashable, Codable {
     var id: UUID
     let name: String
     let url: URL
-
+    
     // Optionnel : constructeur pratique
     init(id: UUID = UUID(), name: String, url: URL) {
         self.id = id
@@ -22,7 +22,20 @@ struct RecentProject: Identifiable, Hashable, Codable {
     }
 }
 
-class RecentProjectsManager: ObservableObject,  Identifiable {
+protocol RecentProjectsProviding {
+    var projects: [RecentProject] { get }
+ 
+    func load()
+    func save()
+
+    func addProject(_ project: RecentProject)
+    func addProject(with url: URL)
+    
+    func removeProject(_ project: RecentProject)
+    func removeProject(at offsets: IndexSet)
+}
+
+class RecentProjectsManager: ObservableObject,  Identifiable , RecentProjectsProviding {
     @Published var projects: [RecentProject] = []
     
     private let key = "RecentProjects"
@@ -35,10 +48,10 @@ class RecentProjectsManager: ObservableObject,  Identifiable {
     func load() {
         if let data = UserDefaults.standard.data(forKey: key),
            let decoded = try? JSONDecoder().decode([RecentProject].self, from: data) {
-
+            
             // Garde uniquement les projets dont le fichier existe
             projects = decoded.filter { FileManager.default.fileExists(atPath: $0.url.path) }
-
+            
             // Enregistre de nouveau si certains projets ont été supprimés
             save()
         }
@@ -49,7 +62,7 @@ class RecentProjectsManager: ObservableObject,  Identifiable {
             UserDefaults.standard.set(encoded, forKey: key)
         }
     }
-
+    
     func addProject(_ project: RecentProject) {
         
         // Supprime les doublons basés sur l'URL
@@ -71,7 +84,7 @@ class RecentProjectsManager: ObservableObject,  Identifiable {
     }
     
     // Suppression d’un projet
-   func removeProject(_ project: RecentProject) {
+    func removeProject(_ project: RecentProject) {
         projects.removeAll { $0.id == project.id }
         save()
     }

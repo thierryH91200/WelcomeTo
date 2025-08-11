@@ -20,7 +20,6 @@ struct WelcomeWindowView: View {
     @State private var window: NSWindow?
     @State private var showCreateSheet = false
     
-    
     var body: some View {
         HStack(spacing: 0) {
             LeftPanelView(
@@ -68,15 +67,14 @@ private struct LeftPanelView: View {
                 .font(.largeTitle)
                 .bold()
             
-            Text("Version 1.1")
+            Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"))")
                 .foregroundColor(.secondary)
             
             VStack(spacing: 10) {
                 Button("Create New Document...") {
                     showCreateSheet = true
                 }
-                
-                                
+
                 Button("Open existing document...") {
                     let panel = NSOpenPanel()
                     panel.canChooseFiles = true
@@ -89,12 +87,10 @@ private struct LeftPanelView: View {
                         appState.isProjectOpen = true
                     }
                 }
-                //                .buttonStyle(.borderedProminent)
                 
                 Button("Open sample document Project...") {
                     onCreateProject()
                 }
-                //                .buttonStyle(.borderedProminent)
             }
             
             Spacer()

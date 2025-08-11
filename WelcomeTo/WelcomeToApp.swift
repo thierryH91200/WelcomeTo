@@ -9,12 +9,6 @@ import SwiftUI
 import SwiftData
 import Combine
 
-//@Observable
-class AppState: ObservableObject {
-    @Published var databaseURL: URL? = nil
-    @Published var isProjectOpen = false
-}
-
 @main
 struct WelcomeToApp: App {
     
@@ -23,22 +17,24 @@ struct WelcomeToApp: App {
     @StateObject private var appState = AppState()
     @StateObject private var recentManager = RecentProjectsManager() // ← ici
     @StateObject private var projectCreationManager = ProjectCreationManager()
-
     @State private var dataController: DataController
     var modelContainer: ModelContainer
-    let schema = Schema([Item.self])
+    
+    let schema = AppGlobals.shared.schema
+    let folder = "WelcomeBDD"
+    let file = "WelcomeTo.store"
 
     init() {
         do {
             let documentsURL = URL.documentsDirectory
-            let pegaseDirectory = documentsURL.appendingPathComponent("WelcomeBDD")
-            if !FileManager.default.fileExists(atPath: pegaseDirectory.path) {
-                try FileManager.default.createDirectory(at: pegaseDirectory, withIntermediateDirectories: true)
+            let directory = documentsURL.appendingPathComponent(folder)
+            if !FileManager.default.fileExists(atPath: directory.path) {
+                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             }
 
-            let storeURL = pegaseDirectory.appendingPathComponent("WelcomeTo.store")
+            let storeURL = directory.appendingPathComponent(file)
             let config = ModelConfiguration(url: storeURL)
-
+            
             modelContainer = try ModelContainer(for: schema, configurations: config)
             modelContainer.mainContext.undoManager = UndoManager()
             
@@ -78,10 +74,12 @@ struct WelcomeToApp: App {
     }
     
     func createProject() {
+        
+
         // 1. Demander un nom à l’utilisateur
         let alert = NSAlert()
-        alert.messageText = String(localized:"Nom du projet")
-        alert.informativeText = String(localized:"Entrez le nom de votre nouvelle base de données :")
+        alert.messageText = String(localized:"Project Name")
+        alert.informativeText = String(localized:"Enter the name of your new database :")
         alert.alertStyle = .informational
         alert.addButton(withTitle: String(localized:"Cancel"))
         alert.addButton(withTitle: String(localized:"OK"))
@@ -109,7 +107,7 @@ struct WelcomeToApp: App {
         // 3. Créer la base SwiftData avec ce nom
         do {
             let configuration = ModelConfiguration(url: storeURL)
-            let container = try ModelContainer(for: Item.self, configurations: configuration)
+            let container = try ModelContainer(for: schema, configurations: configuration)
 
             // Exemple d'insertion d’un élément de test
             let newItem = Item(timestamp: .now)
@@ -124,38 +122,30 @@ struct WelcomeToApp: App {
             print("❌ Erreur création base : \(error)")
         }
     }
-
-    // Fonction appelée quand on choisit un fichier
-    func openDocument(at url: URL) {
-        dataController = DataController(url: url)
-        appState.databaseURL = url
-        appState.isProjectOpen = true
-    }
 }
 
-
-class AppDelegate: NSObject, NSApplicationDelegate {
-    func applicationDidFinishLaunching(_ notification: Notification) {
-    }
-    
-    func applicationShouldTerminateAfterLastWindowClosed (_ sender: NSApplication) -> Bool {
-        return true
-    }
-
-}
 
 @Observable
 @MainActor
 final class DataController {
     var modelContainer: ModelContainer
+    let schema = AppGlobals.shared.schema
 
     init(url: URL) {
         let config = ModelConfiguration(url: url)
         do {
-            self.modelContainer = try ModelContainer(for: Item.self, configurations: config)
+            self.modelContainer = try ModelContainer(for: schema, configurations: config)
             self.modelContainer.mainContext.undoManager = UndoManager()
         } catch {
             fatalError("❌ Failed to create model container: \(error)")
         }
     }
+}
+
+final class AppGlobals {
+    static let shared = AppGlobals() // instance unique
+    
+    let schema = Schema([Item.self])
+    
+    private init() {} // empêche la création d'autres instances
 }
