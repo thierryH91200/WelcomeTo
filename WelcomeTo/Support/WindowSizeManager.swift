@@ -18,18 +18,6 @@ class WindowSizeManager: NSObject, ObservableObject, NSWindowDelegate {
         super.init()
     }
 
-    func preferredWindowSize() -> CGSize? {
-        if isMainViewActive() {
-            let width = UserDefaults.standard.double(forKey: "mainWindowWidth")
-            let height = UserDefaults.standard.double(forKey: "mainWindowHeight")
-            return (width > 0 && height > 0) ? CGSize(width: width, height: height) : nil
-        } else {
-            let width = UserDefaults.standard.double(forKey: "welcomeWindowWidth")
-            let height = UserDefaults.standard.double(forKey: "welcomeWindowHeight")
-            return (width > 0 && height > 0) ? CGSize(width: width, height: height) : nil
-        }
-    }
-
     // Restaure la taille depuis UserDefaults
     func applySavedSize(to window: NSWindow) {
         let width = UserDefaults.standard.double(forKey: "\(windowID)_width")

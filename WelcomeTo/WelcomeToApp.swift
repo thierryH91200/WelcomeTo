@@ -9,12 +9,8 @@ import SwiftUI
 import SwiftData
 import Combine
 
-import SwiftUI
-
-import SwiftUI
-
 @main
-struct MyApp: App {
+struct WelcomeToApp: App {
     
     @StateObject private var appState = AppState()
     @StateObject private var recentManager = RecentProjectsManager() // ← ici

@@ -76,9 +76,3 @@ struct ContentView: View {
     }
 }
 
-// MARK: - View Extension
-extension View {
-    func getHostingWindow(completion: @escaping (NSWindow?) -> Void) -> some View {
-        background(WindowAccessor(callback: completion))
-    }
-}

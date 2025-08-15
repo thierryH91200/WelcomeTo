@@ -76,7 +76,7 @@ Ce projet vise à proposer une expérience utilisateur fluide, moderne et adapt�
 
 - **Développement Swift** : conçu nativement pour macOS.
 - **Expérience utilisateur** : interface claire et agréable.
-- **Projet personnel** : développé dans le cadre de ma retraite, pour explorer et approfondir le développement sur Mac.
+- **Projet personnel** : explorer et approfondir le développement sur Mac.
 - **Favori** : WelcomeTo est un projet auquel je consacre une attention particulière.
 
 ## Activités connexes

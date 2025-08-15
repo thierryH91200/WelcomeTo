@@ -1,11 +1,12 @@
 //
-//  Extensions.swift
+//  UTType+CustomTypes.swift
 //  WelcomeTo
 //
 //  Created by thierryH24 on 05/08/2025.
 //
 
 import UniformTypeIdentifiers
+import SwiftUI
 
 extension UTType {
     static var sqlite: UTType {
