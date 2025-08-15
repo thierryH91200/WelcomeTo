@@ -52,7 +52,6 @@ private struct LeftPanelView: View {
     
     @State private var showCreateSheet = false
     
-    
     var body: some View {
         VStack(spacing: 20) {
             Spacer()
@@ -104,9 +103,9 @@ private struct LeftPanelView: View {
         .frame(maxWidth: .infinity)
         .padding()
     }
-    private func createDatabase(named projectName: String) -> URL? {
-        projectCreationManager.createDatabase(named: projectName)
-    }
+//    private func createDatabase(named projectName: String) -> URL? {
+//        projectCreationManager.createDatabase(named: projectName)
+//    }
 }
 
 private struct RecentProjectsListView: View {

@@ -44,10 +44,7 @@ L'application macOS « WelcomeTo » offre une interface moderne pour la gestion 
 • Si un projet est ouvert (isProjectOpen), l’app affiche ContentView avec le contexte de données.
 • Sinon, elle présente une vue de bienvenue (WelcomeWindowView) pour ouvrir ou créer un projet, affichant aussi les projets récents.
 
-5. Ouverture de projet
-• La fonction openDocument(at:) permet d’ouvrir un projet : elle réinitialise le contrôleur de données et met à jour l’état global.
-
-6. Architecture
+5. Architecture
 • Utilisation de l’environnement SwiftUI pour partager le contexte de données (.environment(\.modelContext, …)) et l’état global (.environmentObject(appState)).
 • Il existe une classe dédiée DataController pour encapsuler la configuration du modèle SwiftData.
 
@@ -61,3 +58,39 @@ L'application permet :
 • De passer d’un écran d’accueil à un écran principal selon l’état d’ouverture d’un projet
 
 L’architecture suit les bonnes pratiques SwiftUI avec une séparation claire entre l’état, la gestion des données et l’interface utilisateur.
+
+autre readMe
+
+
+# WelcomeTo
+
+Bienvenue sur le projet **WelcomeTo** !
+
+## Présentation
+
+WelcomeTo est un projet développé principalement pour Mac en Swift. Il fait partie de mes projets favoris, aux côtés de [PegaseUIData](https://github.com/thierryH91200/PegaseUIData).
+
+Ce projet vise à proposer une expérience utilisateur fluide, moderne et adaptée à l’écosystème Apple. Que vous soyez développeur, utilisateur final ou simplement curieux, WelcomeTo vous invite à découvrir ses fonctionnalités et son code source.
+
+## Points clés du projet
+
+- **Développement Swift** : conçu nativement pour macOS.
+- **Expérience utilisateur** : interface claire et agréable.
+- **Projet personnel** : développé dans le cadre de ma retraite, pour explorer et approfondir le développement sur Mac.
+- **Favori** : WelcomeTo est un projet auquel je consacre une attention particulière.
+
+## Activités connexes
+
+En dehors du développement, je pratique la marche et le vélo – des activités qui inspirent parfois les fonctionnalités ou le design du projet.
+
+## Autres projets
+
+- [PegaseUIData](https://github.com/thierryH91200/PegaseUIData)
+
+## Contact
+
+Pour toute question ou suggestion : [thierryH91200 sur GitHub](https://github.com/thierryH91200)
+
+---
+
+Merci d’utiliser ou de contribuer à WelcomeTo !

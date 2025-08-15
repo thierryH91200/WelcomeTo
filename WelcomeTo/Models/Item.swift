@@ -19,7 +19,6 @@ final class Item {
         // Lire la dernière valeur depuis UserDefaults
         let lastNumber = UserDefaults.standard.integer(forKey: Self.numberKey)
         
-        // Incrémenter
         let newNumber = lastNumber + 1
         
         // Enregistrer la nouvelle valeur

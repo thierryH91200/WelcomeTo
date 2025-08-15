@@ -9,7 +9,6 @@
 import SwiftUI
 import SwiftData
 
-
 struct SplashScreenView: View {
     var body: some View {
         VStack(spacing: 20) {
