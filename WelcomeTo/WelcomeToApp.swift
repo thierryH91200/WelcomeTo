@@ -92,8 +92,6 @@ struct WelcomeToApp: App {
             ContentView()
                 .environment(\.modelContext, dataController.modelContainer.mainContext)
                 .environmentObject(appState)
-                .environmentObject(recentManager)
-                .environmentObject(projectCreationManager)
                 .background(WindowSwitcher(currentWindowID: "mainWindow").environmentObject(appState))
                 .background(
                     WindowAccessor { window in
@@ -103,7 +101,6 @@ struct WelcomeToApp: App {
                         }
                     }
                 )
-
         }
         .defaultSize(width: 1000, height: 600)
     }
@@ -124,7 +121,7 @@ struct WelcomeToApp: App {
         
         let response = alert.runModal()
         guard response == .alertFirstButtonReturn else { return } // Annuler
-        let projectName = textField.stringValue.isEmpty ? "ProjetSansNom" : textField.stringValue
+        let projectName = textField.stringValue.isEmpty ? String(localized:"ProjectUntitled") : textField.stringValue
         
         // 2. Construire l'URL avec le nom choisi
         let documentsURL = URL.documentsDirectory
@@ -136,7 +133,7 @@ struct WelcomeToApp: App {
             return
         }
         
-        let storeURL = newDirectory.appendingPathComponent("\(projectName).sqlite")
+        let storeURL = newDirectory.appendingPathComponent("\(projectName).store")
         
         // 3. Créer la base SwiftData avec ce nom
         do {

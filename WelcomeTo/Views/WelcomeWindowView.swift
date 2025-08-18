@@ -99,13 +99,9 @@ private struct LeftPanelView: View {
                 projectCreationManager.createDatabase(named: projectName)
             }
         }
-        
         .frame(maxWidth: .infinity)
         .padding()
     }
-//    private func createDatabase(named projectName: String) -> URL? {
-//        projectCreationManager.createDatabase(named: projectName)
-//    }
 }
 
 private struct RecentProjectsListView: View {

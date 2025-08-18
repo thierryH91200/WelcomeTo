@@ -10,14 +10,14 @@ The macOS application “WelcomeTo” offers a modern interface for project/docu
 
 
 <p align="center">
-<img src="Doc/Capture1.png" alt="Transactions">
+<img src="Doc/Capture1_en.png" alt="Transactions">
 <p align="center">
 <em>Doc1</em>
 </p>
 </p>
 
 <p align="center">
-<img src="Doc/Capture2.png" alt="Transactions">
+<img src="Doc/Capture2_en.png" alt="Transactions">
 <p align="center">
 <em>Doc2</em>
 </p>

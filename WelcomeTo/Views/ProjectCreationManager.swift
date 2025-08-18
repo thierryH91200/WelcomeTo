@@ -18,7 +18,7 @@ final class ProjectCreationManager: ObservableObject {
         let newDirectory = documentsURL.appendingPathComponent(projectName)
         do {
             try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
-            let storeURL = newDirectory.appendingPathComponent("\(projectName).sqlite")
+            let storeURL = newDirectory.appendingPathComponent("\(projectName).store")
             let configuration = ModelConfiguration(url: storeURL)
             let container = try ModelContainer(for: schema, configurations: configuration)
             
