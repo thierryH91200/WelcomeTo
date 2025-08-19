@@ -1,10 +1,5 @@
-//
-//  RecentProjectsManager.swift
-//  WelcomeTo
-//
-//  Created by thierryH24 on 06/08/2025.
-//
-
+import Foundation
+import SwiftUI
 import Foundation
 import Combine // nécessaire pour ObservableObject et @Published
 
@@ -13,12 +8,14 @@ struct RecentProject: Identifiable, Hashable, Codable {
     var id: UUID
     let name: String
     let url: URL
+    let count : Int
     
     // Optionnel : constructeur pratique
-    init(id: UUID = UUID(), name: String, url: URL) {
+    init(id: UUID = UUID(), name: String, url: URL, count: Int) {
         self.id = id
         self.name = name
         self.url = url
+        self.count = count
     }
 }
 
@@ -79,7 +76,8 @@ class RecentProjectsManager: ObservableObject,  Identifiable , RecentProjectsPro
     }
     
     func addProject(with url: URL) {
-        let project = RecentProject(name: url.lastPathComponent, url: url)
+        let count = itemCount(for: url)
+        let project = RecentProject(name: url.lastPathComponent, url: url, count: count)
         addProject(project)
     }
     
@@ -96,4 +94,21 @@ class RecentProjectsManager: ObservableObject,  Identifiable , RecentProjectsPro
         }
         save()
     }
+    func itemCount(for url: URL) -> Int {
+        // If url points to a file (like .store), use its parent directory
+        let directoryURL: URL
+        if url.hasDirectoryPath {
+            directoryURL = url
+        } else {
+            directoryURL = url.deletingLastPathComponent()
+        }
+        do {
+            let files = try FileManager.default.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
+            // Count only visible files (ignore dotfiles)
+            return files.filter { !$0.lastPathComponent.hasPrefix(".") }.count
+        } catch {
+            return 0
+        }
+    }
+
 }

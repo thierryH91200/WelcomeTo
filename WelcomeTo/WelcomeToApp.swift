@@ -58,8 +58,9 @@ struct WelcomeToApp: App {
             WelcomeWindowView(
                 recentManager: recentManager,
                 openHandler: { url in
-                    let project = RecentProject(name: url.lastPathComponent, url: url)
+                    let project = RecentProject(name: url.lastPathComponent, url: url, count: 0)
                     recentManager.addProject(project)
+                    appState.currentProjectURL = url
                     dataController = DataController(url: url)
                     appState.isProjectOpen = true   // ← déclenche la bascule
                 },
@@ -92,6 +93,7 @@ struct WelcomeToApp: App {
             ContentView()
                 .environment(\.modelContext, dataController.modelContainer.mainContext)
                 .environmentObject(appState)
+                .environmentObject(recentManager) // ← AJOUTER ICI
                 .background(WindowSwitcher(currentWindowID: "mainWindow").environmentObject(appState))
                 .background(
                     WindowAccessor { window in
@@ -145,7 +147,7 @@ struct WelcomeToApp: App {
             container.mainContext.insert(newItem)
             try container.mainContext.save()
             
-            let project = RecentProject(name: storeURL.lastPathComponent, url: storeURL)
+            let project = RecentProject(name: storeURL.lastPathComponent, url: storeURL, count: 1)
             recentManager.addProject(project)
             
             print("✅ Base créée : \(storeURL.path)")
@@ -153,7 +155,6 @@ struct WelcomeToApp: App {
             print("❌ Erreur création base : \(error)")
         }
     }
-
 }
 
 @Observable

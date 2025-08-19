@@ -1,4 +1,3 @@
-
 //
 //  ContentView.swift
 //  Welcome
@@ -12,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var recentManager: RecentProjectsManager
 
     @Query(sort: [SortDescriptor(\Item.number, order: .forward)]) private var items: [Item]
 
@@ -24,7 +24,6 @@ struct ContentView: View {
                     HStack {
                         Text(item.number.map { "N°\($0)" } ?? "—")
                         Text(item.timestamp.formatted(date: .numeric, time: .shortened))
-                        Spacer()
                     }
                 }
             }
@@ -50,7 +49,6 @@ struct ContentView: View {
     }
 
     // MARK: - Private Methods
-
     private func addItem() {
         withAnimation {
             let newItem = Item(timestamp: Date())
@@ -60,6 +58,10 @@ struct ContentView: View {
                 print("✅ Item added and saved")
             } catch {
                 print("❌ Error during save:", error)
+            }
+            // Met à jour le count dans les projets récents si possible
+            if let url = appState.currentProjectURL {
+                recentManager.addProject(with: url)
             }
         }
     }

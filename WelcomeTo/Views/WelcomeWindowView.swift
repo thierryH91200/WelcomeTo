@@ -51,6 +51,7 @@ private struct LeftPanelView: View {
     @EnvironmentObject var projectCreationManager: ProjectCreationManager
     
     @State private var showCreateSheet = false
+    @State private var showResetAlert = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -90,14 +91,29 @@ private struct LeftPanelView: View {
                 Button("Open sample document Project...") {
                     onCreateProject()
                 }
+                
+                Button("Reset preferences…") {
+                    showResetAlert = true
+                }
+                .foregroundColor(.red)
+                .alert("Confirm reset?", isPresented: $showResetAlert) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Reset", role: .destructive) {
+                        if let appDomain = Bundle.main.bundleIdentifier {
+                            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                            UserDefaults.standard.synchronize()
+                        }
+                    }
+                } message: {
+                    Text(String(localized: "This operation will delete all application preferences. Are you sure you want to proceed?"))
+                }
             }
-            
             Spacer()
         }
         .sheet(isPresented: $showCreateSheet) {
-            CreateProjectView { projectName in
+            CreateProjectView(onCreate: { projectName in
                 projectCreationManager.createDatabase(named: projectName)
-            }
+            }, onOpenProject: openHandler)
         }
         .frame(maxWidth: .infinity)
         .padding()
@@ -157,6 +173,11 @@ private struct RecentProjectRowView: View {
                 Text((project.url.path as NSString).abbreviatingWithTildeInPath)
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
+                Spacer()
+                let itemCount = project.count
+                Text("Total items: " + String(itemCount))
+                    .foregroundColor(.secondary)
+                    .font(.footnote)
             }
             
             Spacer()
@@ -184,6 +205,7 @@ struct CreateProjectView: View {
     @State private var projectName: String = "Project without a Name"
     static let numberKey = "ItemLastNumber"
     var onCreate: (String) -> URL?
+    var onOpenProject: (URL) -> Void
     
     var body: some View {
         VStack(spacing: 20) {
@@ -204,7 +226,7 @@ struct CreateProjectView: View {
                     if let url = onCreate(name) {
                         recentManager.addProject(with: url)
                         UserDefaults.standard.set(0, forKey: Self.numberKey)
-
+                        onOpenProject(url)
                         appState.isProjectOpen = true
                         dismiss()
                     }
@@ -215,3 +237,4 @@ struct CreateProjectView: View {
         .padding()
     }
 }
+
