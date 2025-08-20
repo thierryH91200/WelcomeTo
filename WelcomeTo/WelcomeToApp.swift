@@ -30,12 +30,17 @@ struct WelcomeToApp: App {
     init() {
         do {
             let documentsURL = URL.documentsDirectory
-            let directory = documentsURL.appendingPathComponent(folder)
-            if !FileManager.default.fileExists(atPath: directory.path) {
-                try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            var newDirectory = documentsURL.appendingPathComponent(folder)
+            
+            if !FileManager.default.fileExists(atPath: newDirectory.path) {
+                try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
             }
             
-            let storeURL = directory.appendingPathComponent(file)
+            newDirectory = newDirectory.appendingPathComponent(folder)
+            try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
+
+            let storeURL = newDirectory.appendingPathComponent(file)
+            print(storeURL.path)
             let config = ModelConfiguration(url: storeURL)
             
             modelContainer = try ModelContainer(for: schema, configurations: config)
@@ -62,10 +67,6 @@ struct WelcomeToApp: App {
                     recentManager.addProject(project)
                     appState.currentProjectURL = url
                     dataController = DataController(url: url)
-                    appState.isProjectOpen = true   // ← déclenche la bascule
-                },
-                onCreateProject: {
-                    createProject()
                     appState.isProjectOpen = true   // ← déclenche la bascule
                 }
             )
@@ -105,55 +106,6 @@ struct WelcomeToApp: App {
                 )
         }
         .defaultSize(width: 1000, height: 600)
-    }
-
-    func createProject() {
-        
-        // 1. Demander un nom à l’utilisateur
-        let alert = NSAlert()
-        alert.messageText = String(localized:"Project Name")
-        alert.informativeText = String(localized:"Enter the name of your new database :")
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: String(localized:"Cancel"))
-        alert.addButton(withTitle: String(localized:"OK"))
-        
-        let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
-        textField.placeholderString = "MonProjet"
-        alert.accessoryView = textField
-        
-        let response = alert.runModal()
-        guard response == .alertFirstButtonReturn else { return } // Annuler
-        let projectName = textField.stringValue.isEmpty ? String(localized:"ProjectUntitled") : textField.stringValue
-        
-        // 2. Construire l'URL avec le nom choisi
-        let documentsURL = URL.documentsDirectory
-        let newDirectory = documentsURL.appendingPathComponent(projectName)
-        do {
-            try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
-        } catch {
-            print("❌ Erreur création dossier : \(error)")
-            return
-        }
-        
-        let storeURL = newDirectory.appendingPathComponent("\(projectName).store")
-        
-        // 3. Créer la base SwiftData avec ce nom
-        do {
-            let configuration = ModelConfiguration(url: storeURL)
-            let container = try ModelContainer(for: schema, configurations: configuration)
-            
-            // Exemple d'insertion d’un élément de test
-            let newItem = Item(timestamp: .now)
-            container.mainContext.insert(newItem)
-            try container.mainContext.save()
-            
-            let project = RecentProject(name: storeURL.lastPathComponent, url: storeURL, count: 1)
-            recentManager.addProject(project)
-            
-            print("✅ Base créée : \(storeURL.path)")
-        } catch {
-            print("❌ Erreur création base : \(error)")
-        }
     }
 }
 

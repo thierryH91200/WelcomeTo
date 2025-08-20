@@ -8,14 +8,12 @@
 import SwiftUI
 import SwiftData
 
-
 struct WelcomeWindowView: View {
     @ObservedObject var recentManager: RecentProjectsManager
     @EnvironmentObject var appState: AppState
     @Environment(\.modelContext) private var modelContext
     
     var openHandler: (URL) -> Void
-    var onCreateProject: () -> Void
     
     @State private var window: NSWindow?
     @State private var showCreateSheet = false
@@ -23,8 +21,7 @@ struct WelcomeWindowView: View {
     var body: some View {
         HStack(spacing: 0) {
             LeftPanelView(
-                onCreateProject: onCreateProject,
-                openHandler: openHandler,
+                openHandler: openHandler
             )
             .environmentObject(appState)
             .environmentObject(recentManager)
@@ -44,7 +41,7 @@ struct WelcomeWindowView: View {
 
 private struct LeftPanelView: View {
     @Environment(\.modelContext) private var modelContext
-    var onCreateProject: () -> Void
+//    var onSampleProject: () -> Void
     var openHandler: (URL) -> Void
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var recentManager: RecentProjectsManager
@@ -52,6 +49,7 @@ private struct LeftPanelView: View {
     
     @State private var showCreateSheet = false
     @State private var showResetAlert = false
+    @State private var showCopySuccessAlert = false
     
     var body: some View {
         VStack(spacing: 20) {
@@ -89,7 +87,7 @@ private struct LeftPanelView: View {
                 }
                 
                 Button("Open sample document Project...") {
-                    onCreateProject()
+                    preloadDBData()
                 }
                 
                 Button("Reset preferences…") {
@@ -110,6 +108,17 @@ private struct LeftPanelView: View {
             }
             Spacer()
         }
+        .alert("Copie réussie", isPresented: $showCopySuccessAlert) {
+            Button(role: .cancel) {
+                // No action needed
+            } label: {
+                Text("✅ OK")
+            }
+            .frame(width: 50)
+
+        } message: {
+            Text("La copie a bien été effectuée.")
+        }
         .sheet(isPresented: $showCreateSheet) {
             CreateProjectView(onCreate: { projectName in
                 projectCreationManager.createDatabase(named: projectName)
@@ -117,6 +126,62 @@ private struct LeftPanelView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
+    }
+    
+    // https://stackoverflow.com/questions/40761140/how-to-pre-load-database-in-core-data-using-swift-3-xcode-8
+    func preloadDBData() {
+        let folder = "WelcomeBDD"
+        let file = "SampleWelcomeTo.store"
+        let documentsURL = URL.documentsDirectory
+        let newDirectory = documentsURL.appendingPathComponent(folder)
+
+        do {
+            if !FileManager.default.fileExists(atPath: newDirectory.path) {
+                try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
+            }
+        } catch {
+            print("❌ Erreur création base : \(error)")
+            return
+        }
+        
+        let newDirectory1 = newDirectory.appendingPathComponent(folder)
+
+        do {
+            if !FileManager.default.fileExists(atPath: newDirectory1.path) {
+                try FileManager.default.createDirectory(at: newDirectory1, withIntermediateDirectories: true)
+            }
+        } catch {
+            print("❌ Erreur création base : \(error)")
+            return
+        }
+
+        guard let sqlitePath = Bundle.main.path(forResource: "SampleWelcomeTo", ofType: "store") else {
+            print("Fichier source introuvable dans le bundle")
+            return
+        }
+
+        let URL1 = URL(fileURLWithPath: sqlitePath)
+        let storeURL = newDirectory1.appendingPathComponent(file)
+
+        // Supprime l'ancien fichier s'il existe déjà à destination
+        if FileManager.default.fileExists(atPath: storeURL.path) {
+            do {
+                try FileManager.default.removeItem(at: storeURL)
+            } catch {
+                print("Erreur lors de la suppression de l'ancien fichier : \(error)")
+            }
+        }
+
+        do {
+            try FileManager.default.copyItem(at: URL1, to: storeURL)
+            DispatchQueue.main.async {
+                self.showCopySuccessAlert = false
+            }
+        } catch {
+            print("Erreur lors de la copie : \(error)")
+        }
+        recentManager.addProject(with: storeURL)
+        appState.isProjectOpen = true
     }
 }
 
@@ -131,18 +196,28 @@ private struct RecentProjectsListView: View {
                 .padding(.horizontal)
                 .padding(.top)
             
-            List {
-                ForEach(recentManager.projects, id: \.id) { project in
-                    RecentProjectRowView(
-                        project: project,
-                        onOpen: openHandler,
-                        onDelete: {
-                            recentManager.removeProject(project)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(recentManager.projects, id: \.id) { project in
+                            RecentProjectRowView(
+                                project: project,
+                                onOpen: openHandler,
+                                onDelete: {
+                                    recentManager.removeProject(project)
+                                }
+                            )
+                            .id(project.id)
                         }
-                    )
+                    }
+                }
+                .frame(width: 350, height: 300)
+                .onAppear {
+                    if let first = recentManager.projects.first {
+                        proxy.scrollTo(first.id, anchor: .top)
+                    }
                 }
             }
-            .frame(width: 350, height: 300)
             .listStyle(.inset)
             .padding(.horizontal)
         }
@@ -156,6 +231,9 @@ private struct RecentProjectRowView: View {
     let onDelete: () -> Void
     
     @EnvironmentObject var appState: AppState
+    
+    @State private var itemCount: Int? = nil
+    @State private var isLoading: Bool = false
     
     var body: some View {
         HStack(spacing: 12) {
@@ -173,11 +251,16 @@ private struct RecentProjectRowView: View {
                 Text((project.url.path as NSString).abbreviatingWithTildeInPath)
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
-                Spacer()
-                let itemCount = project.count
-                Text("Total items: " + String(itemCount))
-                    .foregroundColor(.secondary)
-                    .font(.footnote)
+//                Spacer()
+                if let itemCount = itemCount {
+                    Text("Total items: " + String(itemCount))
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
+                } else if isLoading {
+                    Text("Chargement...")
+                        .foregroundColor(.secondary)
+                        .font(.footnote)
+                }
             }
             
             Spacer()
@@ -193,6 +276,29 @@ private struct RecentProjectRowView: View {
         .onTapGesture {
             onOpen(project.url)
             appState.isProjectOpen = true
+        }
+        .onAppear { loadItemCount() }
+        .onChange(of: project.url) { _ in loadItemCount() }
+    }
+    
+    private func loadItemCount() {
+        isLoading = true
+        itemCount = nil
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let config = ModelConfiguration(url: project.url)
+                let container = try ModelContainer(for: Item.self, configurations: config)
+                let result = try container.mainContext.fetch(FetchDescriptor<Item>())
+                DispatchQueue.main.async {
+                    self.itemCount = result.count
+                    self.isLoading = false
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.itemCount = 0
+                    self.isLoading = false
+                }
+            }
         }
     }
 }

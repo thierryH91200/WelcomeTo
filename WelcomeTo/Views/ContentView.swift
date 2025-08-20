@@ -22,7 +22,7 @@ struct ContentView: View {
             List {
                 ForEach(items) { item in
                     HStack {
-                        Text(item.number.map { "N°\($0)" } ?? "—")
+                        Text("N°\(item.number)")
                         Text(item.timestamp.formatted(date: .numeric, time: .shortened))
                     }
                 }
@@ -51,17 +51,28 @@ struct ContentView: View {
     // MARK: - Private Methods
     private func addItem() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-            do {
-                try modelContext.save()
-                print("✅ Item added and saved")
-            } catch {
-                print("❌ Error during save:", error)
-            }
-            // Met à jour le count dans les projets récents si possible
             if let url = appState.currentProjectURL {
+                let count = recentManager.itemCount(for: url)
+                let newItem = Item(timestamp: Date(), count: count)
+                modelContext.insert(newItem)
+                do {
+                    try modelContext.save()
+                    print("✅ Item ajouté et sauvegardé")
+                } catch {
+                    print("❌ Erreur lors de la sauvegarde:", error)
+                }
+                // Met à jour le count dans les projets récents
                 recentManager.addProject(with: url)
+            } else {
+                // Cas fallback si pas d’URL connue
+                let newItem = Item(timestamp: Date())
+                modelContext.insert(newItem)
+                do {
+                    try modelContext.save()
+                    print("✅ Item ajouté et sauvegardé (pas d’URL)")
+                } catch {
+                    print("❌ Erreur lors de la sauvegarde:", error)
+                }
             }
         }
     }

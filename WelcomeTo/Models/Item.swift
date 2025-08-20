@@ -10,22 +10,12 @@ import SwiftData
 
 @Model
 final class Item {
-    static let numberKey = "ItemLastNumber"  // Clé UserDefaults
 
     var timestamp: Date
-    var number: Int?
-
-    init(timestamp: Date = .now) {
-        // Lire la dernière valeur depuis UserDefaults
-        let lastNumber = UserDefaults.standard.integer(forKey: Self.numberKey)
-        
-        let newNumber = lastNumber + 1
-        
-        // Enregistrer la nouvelle valeur
-        UserDefaults.standard.set(newNumber, forKey: Self.numberKey)
-
-        // Assigner aux propriétés
+    var number: Int
+    init(timestamp: Date = .now, count: Int = 0) {
+        // Initialisation avec les valeurs passées en paramètres
         self.timestamp = timestamp
-        self.number = newNumber
+        self.number = count
     }
 }
