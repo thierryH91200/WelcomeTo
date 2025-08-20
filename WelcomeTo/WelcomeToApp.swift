@@ -12,6 +12,8 @@ import Combine
 @main
 struct WelcomeToApp: App {
     
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     @StateObject private var appState = AppState()
     @StateObject private var recentManager = RecentProjectsManager() // ← ici
     @StateObject private var projectCreationManager = ProjectCreationManager()
@@ -24,7 +26,7 @@ struct WelcomeToApp: App {
     var modelContainer: ModelContainer
     
     let schema = AppGlobals.shared.schema
-    let folder = "WelcomeBDD"
+    let folder = "WelcomeToBDD"
     let file = "WelcomeTo.store"
 
     init() {
@@ -40,7 +42,6 @@ struct WelcomeToApp: App {
             try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
 
             let storeURL = newDirectory.appendingPathComponent(file)
-            print(storeURL.path)
             let config = ModelConfiguration(url: storeURL)
             
             modelContainer = try ModelContainer(for: schema, configurations: config)
@@ -132,4 +133,5 @@ final class AppGlobals {
     
     private init() {}
 }
+
 

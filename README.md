@@ -12,14 +12,14 @@ The macOS application “WelcomeTo” offers a modern interface for project/docu
 <p align="center">
 <img src="Doc/Capture1_en.png" alt="Transactions">
 <p align="center">
-<em>Doc1</em>
+<em>Welcome</em>
 </p>
 </p>
 
 <p align="center">
 <img src="Doc/Capture2_en.png" alt="Transactions">
 <p align="center">
-<em>Doc2</em>
+<em>Main</em>
 </p>
 </p>
 
@@ -44,7 +44,7 @@ The macOS application “WelcomeTo” offers a modern interface for project/docu
 • Focuses the main window when displayed.
 
 3. Data Management
-• Uses SwiftData to persist items in a dedicated folder within the Documents directory (WelcomeBDD/WelcomeTo.store).
+• Uses SwiftData to persist items in a dedicated folder within the Documents directory (WelcomeToBDD/WelcomeTo.store).
 • CRUD operations are performed via modelContext.
 
 4. Application Structure

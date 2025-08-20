@@ -11,5 +11,5 @@ import Combine
 class AppState: ObservableObject {
     @Published var databaseURL: URL? = nil
     @Published var currentProjectURL: URL? = nil
-    @Published var isProjectOpen = false    
+    @Published var isProjectOpen = false
 }

@@ -52,31 +52,22 @@ struct ContentView: View {
     private func addItem() {
         withAnimation {
             if let url = appState.currentProjectURL {
-                let count = recentManager.itemCount(for: url)
-                let newItem = Item(timestamp: Date(), count: count)
+                let itemCount = recentManager.itemCount(for: url)
+
+                let newItem = Item(timestamp: Date(), count: itemCount + 1)
                 modelContext.insert(newItem)
                 do {
                     try modelContext.save()
                     print("✅ Item ajouté et sauvegardé")
-                } catch {
-                    print("❌ Erreur lors de la sauvegarde:", error)
-                }
-                // Met à jour le count dans les projets récents
-                recentManager.addProject(with: url)
-            } else {
-                // Cas fallback si pas d’URL connue
-                let newItem = Item(timestamp: Date())
-                modelContext.insert(newItem)
-                do {
-                    try modelContext.save()
-                    print("✅ Item ajouté et sauvegardé (pas d’URL)")
+                    recentManager.addProject(with: url)
+                    
                 } catch {
                     print("❌ Erreur lors de la sauvegarde:", error)
                 }
             }
         }
     }
-    
+
     private func activateMainWindow() {
         if let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "Main Project Window" }) {
             window.makeKeyAndOrderFront(nil)
@@ -88,4 +79,3 @@ struct ContentView: View {
         }
     }
 }
-

@@ -2,6 +2,8 @@ import Foundation
 import SwiftUI
 import Foundation
 import Combine // nécessaire pour ObservableObject et @Published
+import SwiftData
+
 
 
 struct RecentProject: Identifiable, Hashable, Codable {
@@ -94,21 +96,15 @@ class RecentProjectsManager: ObservableObject,  Identifiable , RecentProjectsPro
         }
         save()
     }
+    
     func itemCount(for url: URL) -> Int {
-        // If url points to a file (like .store), use its parent directory
-        let directoryURL: URL
-        if url.hasDirectoryPath {
-            directoryURL = url
-        } else {
-            directoryURL = url.deletingLastPathComponent()
-        }
         do {
-            let files = try FileManager.default.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
-            // Count only visible files (ignore dotfiles)
-            return files.filter { !$0.lastPathComponent.hasPrefix(".") }.count
+            let config = ModelConfiguration(url: url)
+            let container = try ModelContainer(for: Item.self, configurations: config)
+            let items = try container.mainContext.fetch(FetchDescriptor<Item>())
+            return items.count
         } catch {
             return 0
         }
     }
-
 }

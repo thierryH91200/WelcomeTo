@@ -13,7 +13,7 @@ final class ProjectCreationManager: ObservableObject {
     @MainActor func createDatabase(named projectName: String) -> URL? {
         
         let schema = AppGlobals.shared.schema
-        let folder = "WelcomeBDD"
+        let folder = "WelcomeToBDD"
         let file = projectName + ".store"
 
         do {
@@ -26,7 +26,6 @@ final class ProjectCreationManager: ObservableObject {
             try FileManager.default.createDirectory(at: newDirectory, withIntermediateDirectories: true)
 
             let storeURL = newDirectory.appendingPathComponent("\(file)")
-            print(storeURL.path)
             let config = ModelConfiguration(url: storeURL)
             
             let modelContainer = try ModelContainer(for: schema, configurations: config)

@@ -130,7 +130,7 @@ private struct LeftPanelView: View {
     
     // https://stackoverflow.com/questions/40761140/how-to-pre-load-database-in-core-data-using-swift-3-xcode-8
     func preloadDBData() {
-        let folder = "WelcomeBDD"
+        let folder = "WelcomeToBDD"
         let file = "SampleWelcomeTo.store"
         let documentsURL = URL.documentsDirectory
         let newDirectory = documentsURL.appendingPathComponent(folder)
@@ -180,6 +180,7 @@ private struct LeftPanelView: View {
         } catch {
             print("Erreur lors de la copie : \(error)")
         }
+        openHandler(storeURL)
         recentManager.addProject(with: storeURL)
         appState.isProjectOpen = true
     }
@@ -343,4 +344,3 @@ struct CreateProjectView: View {
         .padding()
     }
 }
-

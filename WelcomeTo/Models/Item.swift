@@ -13,7 +13,7 @@ final class Item {
 
     var timestamp: Date
     var number: Int
-    init(timestamp: Date = .now, count: Int = 0) {
+    init(timestamp: Date = .now, count: Int = 1) {
         // Initialisation avec les valeurs passées en paramètres
         self.timestamp = timestamp
         self.number = count

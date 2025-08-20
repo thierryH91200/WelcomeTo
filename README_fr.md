@@ -12,14 +12,14 @@ L'application macOS « WelcomeTo » offre une interface moderne pour la gestion 
 <p align="center">
 <img src="Doc/Capture1.png" alt="Transactions">
 <p align="center">
-<em>Doc1</em>
+<em>Welcome</em>
 </p>
 </p>
 
 <p align="center">
 <img src="Doc/Capture2.png" alt="Transactions">
 <p align="center">
-<em>Doc2</em>
+<em>Main</em>
 </p>
 </p>
 
@@ -36,7 +36,7 @@ L'application macOS « WelcomeTo » offre une interface moderne pour la gestion 
    • Un contrôleur de données (DataController), qui encapsule le conteneur SwiftData
 
 3. Initialisation et gestion de la base de données
-• Au démarrage, un dossier spécifique (“WelcomeBDD”) est créé dans le dossier Documents de l’utilisateur pour stocker la base.
+• Au démarrage, un dossier spécifique (“WelcomeToBDD”) est créé dans le dossier Documents de l’utilisateur pour stocker la base.
 • Le conteneur de modèles SwiftData (ModelContainer) est initialisé avec ce chemin.
 • L’application gère les undo via un UndoManager.
 
