@@ -64,3 +64,14 @@ This is a macOS “project/document manager” application with a welcome screen
 
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/thierryH91200/WelcomeTo.svg?variant=adaptive)](https://starchart.cc/thierryH91200/WelcomeTo)
+
+
+
+
+
+https://github.com/thierryH91200/WelcomeTo and also
+https://github.com/thierryH91200/PegaseUIData
+
+I wrote this application in Xcode style.
+look at class ProjectCreationManager
+maybe this can help you

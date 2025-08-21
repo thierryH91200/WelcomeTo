@@ -16,9 +16,16 @@ struct WindowSwitcher: View {
                 if appState.isProjectOpen, currentWindowID == "welcomeWindow" {
                     openWindow(id: "mainWindow")
                     dismissWindow(id: "welcomeWindow")
+                    if let window = NSApp.windows.first(where: { $0.title == "Welcome" }) {
+                          window.close()
+                      }
+
                 } else if !appState.isProjectOpen, currentWindowID == "mainWindow" {
                     openWindow(id: "welcomeWindow")
                     dismissWindow(id: "mainWindow")
+                    if let window = NSApp.windows.first(where: { $0.title == "Main" }) {
+                          window.close()
+                      }
                 }
             }
             // Bascule dès que l’état change
@@ -28,12 +35,18 @@ struct WindowSwitcher: View {
                     if currentWindowID != "mainWindow" {
                         openWindow(id: "mainWindow")
                         dismissWindow(id: "welcomeWindow")
+                        if let window = NSApp.windows.first(where: { $0.title == "Welcome" }) {
+                              window.close()
+                          }
                     }
                 } else {
                     // Revenir vers Welcome
                     if currentWindowID != "welcomeWindow" {
                         openWindow(id: "welcomeWindow")
                         dismissWindow(id: "mainWindow")
+                        if let window = NSApp.windows.first(where: { $0.title == "Main" }) {
+                              window.close()
+                          }
                     }
                 }
             }

@@ -41,7 +41,7 @@ struct WelcomeWindowView: View {
 
 private struct LeftPanelView: View {
     @Environment(\.modelContext) private var modelContext
-//    var onSampleProject: () -> Void
+
     var openHandler: (URL) -> Void
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var recentManager: RecentProjectsManager
@@ -208,11 +208,14 @@ private struct RecentProjectsListView: View {
                                     recentManager.removeProject(project)
                                 }
                             )
+                            .background(.bar)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .padding(.vertical, 4)
                             .id(project.id)
                         }
                     }
                 }
-                .frame(width: 350, height: 300)
+                .frame(width: 450, height: 400)
                 .onAppear {
                     if let first = recentManager.projects.first {
                         proxy.scrollTo(first.id, anchor: .top)
@@ -279,26 +282,22 @@ private struct RecentProjectRowView: View {
             appState.isProjectOpen = true
         }
         .onAppear { loadItemCount() }
-        .onChange(of: project.url) { _ in loadItemCount() }
+        .onChange(of: project.url) { _ , _ in loadItemCount() }
     }
     
     private func loadItemCount() {
         isLoading = true
         itemCount = nil
-        DispatchQueue.global(qos: .background).async {
+        Task {
             do {
                 let config = ModelConfiguration(url: project.url)
                 let container = try ModelContainer(for: Item.self, configurations: config)
                 let result = try container.mainContext.fetch(FetchDescriptor<Item>())
-                DispatchQueue.main.async {
-                    self.itemCount = result.count
-                    self.isLoading = false
-                }
+                self.itemCount = result.count
+                self.isLoading = false
             } catch {
-                DispatchQueue.main.async {
-                    self.itemCount = 0
-                    self.isLoading = false
-                }
+                self.itemCount = 0
+                self.isLoading = false
             }
         }
     }
@@ -344,3 +343,4 @@ struct CreateProjectView: View {
         .padding()
     }
 }
+
