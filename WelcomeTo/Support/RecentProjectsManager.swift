@@ -100,8 +100,8 @@ class RecentProjectsManager: ObservableObject,  Identifiable , RecentProjectsPro
     func itemCount(for url: URL) -> Int {
         do {
             let config = ModelConfiguration(url: url)
-            let container = try ModelContainer(for: Item.self, configurations: config)
-            let items = try container.mainContext.fetch(FetchDescriptor<Item>())
+            let container = try ModelContainer(for: Person.self, configurations: config)
+            let items = try container.mainContext.fetch(FetchDescriptor<Person>())
             return items.count
         } catch {
             return 0

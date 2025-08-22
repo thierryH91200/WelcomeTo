@@ -13,18 +13,16 @@ struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var recentManager: RecentProjectsManager
 
-    @Query(sort: [SortDescriptor(\Item.number, order: .forward)]) private var items: [Item]
+    @Query(sort: [SortDescriptor(\Person.number, order: .forward)]) private var persons: [Person]
 
     var body: some View {
         VStack {
             Text("Main window is open ✅")
-            Text("Items count: \(items.count)")
-            List {
-                ForEach(items) { item in
-                    HStack {
-                        Text("N°\(item.number)")
-                        Text(item.timestamp.formatted(date: .numeric, time: .shortened))
-                    }
+            Text("Items count: \(persons.count)")
+            List(persons) { item in
+                HStack {
+                    Text("N°\(item.number)")
+                    Text(item.name)
                 }
             }
             Button("Add Item") {
@@ -34,6 +32,9 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.green)
         .onAppear {
+            activateMainWindow()
+        }
+        .onChange(of: appState.currentProjectURL) { newValue in
             activateMainWindow()
         }
         .toolbar {
@@ -54,7 +55,7 @@ struct ContentView: View {
             if let url = appState.currentProjectURL {
                 let itemCount = recentManager.itemCount(for: url)
 
-                let newItem = Item(timestamp: Date(), count: itemCount + 1)
+                let newItem = Person( name: "Baby", age: 7, city: "Seoul", number: itemCount + 1)
                 modelContext.insert(newItem)
                 do {
                     try modelContext.save()
@@ -69,13 +70,18 @@ struct ContentView: View {
     }
 
     private func activateMainWindow() {
-        if let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "Main Project Window" }) {
+        print("Fenêtres AVANT :", NSApp.windows.map { $0.title })
+        if let window = NSApp.windows.first(where: { $0.isVisible && $0.title == "mainWindow" }) {
             window.makeKeyAndOrderFront(nil)
             window.makeMain()
             NSApp.activate(ignoringOtherApps: true)
+            print("Fenêtres APRÈS :", NSApp.windows.map { $0.title })
         } else {
             NSApp.activate(ignoringOtherApps: true)
             NSApp.mainWindow?.makeKeyAndOrderFront(nil)
+            // Idem ici si besoin
+            print("Fenêtres APRÈS :", NSApp.windows.map { $0.title })
         }
     }
 }
+

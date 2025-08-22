@@ -129,7 +129,7 @@ final class DataController {
 
 final class AppGlobals {
     static let shared = AppGlobals()
-    let schema = Schema([Item.self])
+    let schema = Schema([Person.self])
     
     private init() {}
 }

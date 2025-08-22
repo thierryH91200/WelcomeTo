@@ -9,13 +9,19 @@ import Foundation
 import SwiftData
 
 @Model
-final class Item {
+final class Person {
 
-    var timestamp: Date
+    var id = UUID()
+    var name: String
+    var age: Int
+    var city: String
     var number: Int
-    init(timestamp: Date = .now, count: Int = 1) {
-        // Initialisation avec les valeurs passées en paramètres
-        self.timestamp = timestamp
-        self.number = count
+
+    init(id: UUID = UUID(), name: String, age: Int, city: String, number: Int = 1)
+    {
+        self.name = name
+        self.age = age
+        self.city = city
+        self.number = number
     }
 }

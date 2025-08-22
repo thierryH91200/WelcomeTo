@@ -291,8 +291,8 @@ private struct RecentProjectRowView: View {
         Task {
             do {
                 let config = ModelConfiguration(url: project.url)
-                let container = try ModelContainer(for: Item.self, configurations: config)
-                let result = try container.mainContext.fetch(FetchDescriptor<Item>())
+                let container = try ModelContainer(for: Person.self, configurations: config)
+                let result = try container.mainContext.fetch(FetchDescriptor<Person>())
                 self.itemCount = result.count
                 self.isLoading = false
             } catch {

@@ -32,7 +32,7 @@ final class ProjectCreationManager: ObservableObject {
             modelContainer.mainContext.undoManager = UndoManager()
 
             // Exemple d'insertion d’un élément de test
-            let newItem = Item(timestamp: .now)
+            let newItem = Person( name: "Baby", age: 7, city: "Seoul", number: 1)
             modelContainer.mainContext.insert(newItem)
             try modelContainer.mainContext.save()
             
