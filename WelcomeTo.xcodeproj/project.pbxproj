@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		034480302E421AAD00438FC6 /* README_fr.md in Resources */ = {isa = PBXBuildFile; fileRef = 0344802F2E421AAD00438FC6 /* README_fr.md */; };
 		034480312E421AAD00438FC6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0344802E2E421AAD00438FC6 /* README.md */; };
+		03620F242E59D835007DAD25 /* README 2.md in Resources */ = {isa = PBXBuildFile; fileRef = 03620F232E59D835007DAD25 /* README 2.md */; };
 		03C81BC22E58CAC3004A8B4D /* README 2.md in Resources */ = {isa = PBXBuildFile; fileRef = 03C81BC12E58CAC3004A8B4D /* README 2.md */; };
 		03E6EB4F2E45C71600508FF6 /* Welcome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E6EB472E45C71600508FF6 /* Welcome.framework */; };
 		03E6EB502E45C71600508FF6 /* Welcome.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03E6EB472E45C71600508FF6 /* Welcome.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		0344802E2E421AAD00438FC6 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0344802F2E421AAD00438FC6 /* README_fr.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_fr.md; sourceTree = "<group>"; };
+		03620F232E59D835007DAD25 /* README 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README 2.md"; sourceTree = "<group>"; };
 		03C2B58C2E410D0800FC567D /* WelcomeTo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WelcomeTo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03C81BC12E58CAC3004A8B4D /* README 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README 2.md"; sourceTree = "<group>"; };
 		03E6EB472E45C71600508FF6 /* Welcome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Welcome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +105,7 @@
 				03E6EB482E45C71600508FF6 /* Welcome */,
 				03C2B58D2E410D0800FC567D /* Products */,
 				0344802E2E421AAD00438FC6 /* README.md */,
+				03620F232E59D835007DAD25 /* README 2.md */,
 				0344802F2E421AAD00438FC6 /* README_fr.md */,
 				03C2B58E2E410D0800FC567D /* WelcomeTo */,
 				03C81BC12E58CAC3004A8B4D /* README 2.md */,
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				034480302E421AAD00438FC6 /* README_fr.md in Resources */,
+				03620F242E59D835007DAD25 /* README 2.md in Resources */,
 				03C81BC22E58CAC3004A8B4D /* README 2.md in Resources */,
 				034480312E421AAD00438FC6 /* README.md in Resources */,
 			);

@@ -50,8 +50,6 @@ struct ContentView: View {
         .id(refreshID)
     }
 
-
-
     var body: some View {
         VStack {
             Text("Main window is open ✅")
@@ -60,10 +58,14 @@ struct ContentView: View {
                 HStack {
                     Text("N°\(item.number)")
                     Text(item.name)
+                    Text("\(item.age)")
                 }
             }
+//            tableSection
             HStack {
-                
+                Button("Add Item") {
+                    addItem()
+                }
                 Button(action: {
                     isAddDialogPresented = true
                     isModeCreate = true
@@ -93,9 +95,11 @@ struct ContentView: View {
 //        .background(Color.green)
         .onAppear {
             activateMainWindow()
+            setupDataManager()
         }
         .onChange(of: appState.currentProjectURL) { _, newValue in
             activateMainWindow()
+            setupDataManager()
         }
         .toolbar {
             ToolbarItem(placement: .navigation) {
@@ -113,27 +117,39 @@ struct ContentView: View {
                           systemImage: isDarkMode ? "sun.max" : "moon")
                 }
             }
-
-
         }
-        .sheet(isPresented: $isEditDialogPresented, onDismiss: {setupDataManager()})
+        .sheet(isPresented: $isEditDialogPresented,
+               onDismiss: { setupDataManager()
+                            addProject() })
         {
             PersonFormView(
                 isPresented: $isEditDialogPresented,
                 isModeCreate: $isModeCreate,
-                person: selectedPerson)
+                person: selectedPerson,
+                url: appState.currentProjectURL)
         }
-        .sheet(isPresented: $isAddDialogPresented , onDismiss: {setupDataManager()})
+        .sheet(isPresented: $isAddDialogPresented ,
+               onDismiss: { setupDataManager()
+                            addProject() })
         {
             PersonFormView(
                 isPresented: $isAddDialogPresented,
                 isModeCreate: $isModeCreate,
-                person: nil)
+                person: nil,
+                url: appState.currentProjectURL ) {
+                    addProject()
+            }
+        }
+    }
+    
+    func addProject() {
+        if let url = appState.currentProjectURL {
+            recentManager.addProject(with: url)
         }
     }
 
     // MARK: - Private Methods
-    private func addItem() {
+    func addItem() {
         withAnimation {
             if let url = appState.currentProjectURL {
                 let itemCount = recentManager.itemCount(for: url)
@@ -166,130 +182,8 @@ struct ContentView: View {
     private func setupDataManager() {
         DataContext.shared.context = modelContext
         DataContext.shared.undoManager = undoManager
-
-        // Vider toutes les anciennes entités avant de recharger (sécurité)
-//        PersonManager.shared.resetEntities()
-
-        if let allData = PersonManager.shared.getAllData() {
-            person = allData
-        } else {
-            person = []
-        }
-    }
-
-}
-
-// Vue pour la boîte de dialogue d'ajout
-struct PersonFormView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
-    
-    @Binding var isPresented: Bool
-    @Binding var isModeCreate: Bool
-    let person: Person?
-    
-    @State private var name: String = ""
-    @State private var age: Int = 0
-    @State private var city: String = ""
-    @State private var number: Int = 1
-
-    var body: some View {
-        VStack(spacing: 0) { // Spacing à 0 pour que les bandeaux soient collés au contenu
-            // Bandeau du haut
-            Rectangle()
-                .fill(isModeCreate ? Color.blue : Color.green)
-                .frame(height: 10)
-            
-            // Contenu principal
-            VStack(spacing: 20) {
-                Text(isModeCreate ? "Add Person" : "Edit Person")
-                    .font(.headline)
-                    .padding(.top, 10) // Ajoute un peu d'espace après le bandeau
-                
-                HStack {
-                    Text("Name")
-                        .frame(width: 100, alignment: .leading)
-                    TextField("", text: $name)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                
-                HStack {
-                    Text("Age")
-                        .frame(width: 100, alignment: .leading)
-                    TextField("", value: $age, formatter: NumberFormatter())
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                
-                HStack {
-                    Text("City")
-                        .frame(width: 100, alignment: .leading)
-                    TextField("", text: $city)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                Spacer()
-            }
-            .padding()
-            .navigationTitle(person == nil ? "New Person" : "Edit Person")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        isPresented = false
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        isPresented = false
-                        save()
-                        dismiss()
-                    }
-                    .disabled(name.isEmpty || city.isEmpty)
-                    .opacity(name.isEmpty || city.isEmpty ? 0.6 : 1)
-                }
-            }
-            .frame(width: 400)
-            
-            // Bandeau du bas
-            Rectangle()
-                .fill(isModeCreate ? Color.blue : Color.green)
-                .frame(height: 10)
-        }
-        .onAppear {
-            if let person = person {
-                name = person.name
-                age = person.age
-                city = person.city
-                number = person.number
-            }
-        }
-    }
-    
-    private func save() {
-        if isModeCreate { // Création
-            PersonManager.shared.create(
-                name: name,
-                age: age,
-                city: city,
-                number: number
-            )
-        } else { // Modification
-            if let existingItem = person {
-                existingItem.name = name
-                existingItem.age = age
-                existingItem.city = city
-                try? modelContext.save()
-            }
-        }
         
-        isPresented = false
-        dismiss()
-    }
-    
-    private func updatePerson(_ item: Person) {
-        item.name = name
-        item.age = age
-        item.city = city
-        item.number = number
+        person = PersonManager.shared.getAllData()
     }
 }
 

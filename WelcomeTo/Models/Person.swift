@@ -48,7 +48,7 @@ final class PersonManager: ObservableObject {
         return person
     }
     
-    func getAllData() -> [Person]? {
+    func getAllData() -> [Person] {
         
         entitiesPerson.removeAll()
         
@@ -67,7 +67,6 @@ final class PersonManager: ObservableObject {
         }
         return entitiesPerson
     }
-
 }
 
 final class DataContext {
