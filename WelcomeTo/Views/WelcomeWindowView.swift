@@ -85,11 +85,9 @@ private struct LeftPanelView: View {
                         appState.isProjectOpen = true
                     }
                 }
-                
                 Button("Open sample document Project...") {
                     preloadDBData()
                 }
-                
                 Button("Reset preferences…") {
                     showResetAlert = true
                 }

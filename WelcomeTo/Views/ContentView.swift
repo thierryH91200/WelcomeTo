@@ -22,7 +22,6 @@ struct ContentView: View {
     @State private var selectedItem: Person.ID?
 
     @State private var isDarkMode = false
-    @State private var refreshID = UUID()
 
     @State private var isAddDialogPresented = false
     @State private var isEditDialogPresented = false
@@ -35,9 +34,8 @@ struct ContentView: View {
     
     @State private var sortOrder = [KeyPathComparator(\Person.name)]
 
-    
     private var tableSection: some View {
-        Table(person, selection: $selectedItem, sortOrder: $sortOrder) {
+        Table(persons, selection: $selectedItem, sortOrder: $sortOrder) {
             TableColumn("Name", value: \.name)
             TableColumn("Age") { person in
                 Text("\(person.age)")
@@ -47,25 +45,24 @@ struct ContentView: View {
                 Text("\(person.number)")
             }
         }
-        .id(refreshID)
+    }
+    private var listSection: some View {
+        List(persons) { item in
+            HStack {
+                Text("N°\(item.number)")
+                Text(item.name)
+                Text("\(item.age)")
+            }
+        }
     }
 
     var body: some View {
         VStack {
             Text("Main window is open ✅")
             Text("Items count: \(persons.count)")
-            List(persons) { item in
-                HStack {
-                    Text("N°\(item.number)")
-                    Text(item.name)
-                    Text("\(item.age)")
-                }
-            }
-//            tableSection
+//            listSection
+            tableSection
             HStack {
-                Button("Add Item") {
-                    addItem()
-                }
                 Button(action: {
                     isAddDialogPresented = true
                     isModeCreate = true
@@ -186,5 +183,4 @@ struct ContentView: View {
         person = PersonManager.shared.getAllData()
     }
 }
-
 
